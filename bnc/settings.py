@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+import sys
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -123,16 +125,19 @@ QUILL_CONFIGS = {
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_NAME'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_PASSWORD'),
-        'PORT': os.getenv('POSTGRES_PORT'),
+DB_URL = os.getenv('DB_URL', 'sqlite')
+
+if DB_URL == 'sqlite':
+    DATABASES = {
+        'default': {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    DATABASES = {
+        'default': dj_database_url.parse(DB_URL)
+    }
 
 
 # Password validation
