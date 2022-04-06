@@ -31,7 +31,10 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
+APP_URL = os.getenv('APP_URL', 'http://localhost:8000')
+
+ALLOWED_HOSTS = [APP_URL]
+CSRF_TRUSTED_ORIGINS = [APP_URL]
 
 LANGUAGES = (
     ('uk', 'Ukrainian'),
