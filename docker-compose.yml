@@ -8,9 +8,9 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -29,9 +29,11 @@ services:
       - DEPLOY_HOOK
       - DEBUG
       - SECRET_KEY
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST
+      - POSTGRES_PORT
+      - POSTGRES_NAME
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
       - AWS_S3_REGION_NAME
       - AWS_S3_ENDPOINT_URL
       - AWS_STORAGE_BUCKET_NAME
