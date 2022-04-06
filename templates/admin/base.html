@@ -1,0 +1,35 @@
+{% extends 'admin/base.html' %}
+
+{% block extrahead %}
+<script>
+  function ___deploy() {
+    if (window.confirm('Are you sure?')) {
+      fetch('{{deploy_hook}}', { method: 'POST' })
+        .then(() => window.alert('Success. Website will be updated soon.'))
+        .catch(() => window.alert('ERROR: Failed to deploy'));
+    }
+  }
+</script>
+{% endblock %}
+{% block extrastyle %}{{ block.super }}
+<style>
+  .custom-btn-link,
+  .custom-btn-link:hover {
+    background: white;
+    padding: 4px 7px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: black !important;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    text-transform: none;
+  }
+</style>
+{% endblock %}
+{% block userlinks %}
+    {{ block.super }} /
+    <a class="custom-btn-link" href="{{preview_url}}">Preview</a>
+    <button class="custom-btn-link" onclick="___deploy();">Deploy</a>
+{% endblock %}

@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,700;1,400;1,700&display=optional');
+
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+  font-family: 'Montserrat', -apple-system, "Helvetica Neue", Arial, sans-serif;
+  background: none !important;
+  color: inherit !important;
+}
+
+.ql-editor h1 {
+  font-size: 3rem !important;
+}
+
+.ql-editor h2 {
+  font-size: 2.5rem !important;
+}
+
+.ql-editor h3 {
+  font-size: 2rem !important;
+}
+
+.ql-editor p {
+  font-family: Raleway, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
