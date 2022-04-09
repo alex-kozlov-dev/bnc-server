@@ -7,10 +7,6 @@ class PostTranslationOptions(TranslationOptions):
     fields = ('title', 'text')
 
 
-class ImageTranslationOptions(TranslationOptions):
-    fields = ('alt',)
-
-
 class WebsiteMetaTranslationOptions(TranslationOptions):
     fields = ('title', 'description', 'address')
 
@@ -50,6 +46,5 @@ translator.register(models.TextItem, TextItemTranslationOptions)
 translator.register(models.IconTextItem, IconTextItemTranslationOptions)
 translator.register(models.Question, QuestionTranslationOptions)
 translator.register(models.Post, PostTranslationOptions)
-translator.register(models.Image, ImageTranslationOptions)
 translator.register(models.File, FileTranslationOptions)
 translator.register(models.PaymentDetail, PaymentDetailTranslationOptions)

@@ -10,12 +10,12 @@ from bnc.settings import MEDIA_URL
 from . import models
 
 
-class ImageInline(NestedStackedInline, TranslationStackedInline):
-    fields = ('src', 'preview', 'alt')
+class ImageInline(NestedStackedInline):
+    fields = ('src', 'preview')
     readonly_fields = ('preview', 'thumb')
     preview = AdminThumbnail(image_field='thumb')
     model = models.Image
-    extra = 0
+    extra = 1
 
 
 @admin.register(models.Post)
@@ -43,22 +43,22 @@ class WebsiteMetaAdmin(SingletonModelAdmin, TranslationAdmin, NestedModelAdmin):
 
 class IconTextItemInline(NestedStackedInline, TranslationStackedInline):
     model = models.IconTextItem
-    extra = 0
+    extra = 1
 
 
 class QuestionInline(NestedStackedInline, TranslationStackedInline):
     model = models.Question
-    extra = 0
+    extra = 1
 
 
 class PartnerInline(NestedStackedInline):
     model = models.Partner
-    extra = 0
+    extra = 1
 
 
 class TextItemInline(NestedStackedInline, TranslationStackedInline):
     model = models.TextItem
-    extra = 0
+    extra = 1
 
 
 class PageSectionInline(NestedStackedInline, TranslationStackedInline):
@@ -70,7 +70,7 @@ class PageSectionInline(NestedStackedInline, TranslationStackedInline):
 
     image_preview = AdminThumbnail(image_field='image')
 
-    extra = 0
+    extra = 1
 
 
 @admin.register(models.Homepage)

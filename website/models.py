@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from solo.models import SingletonModel
 from extra_validator import FieldValidationMixin
@@ -16,7 +17,7 @@ class WebsiteMeta(SingletonModel):
     logo_inverted = models.FileField(validators=[is_svg])
     email = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
-    address = models.TextField()
+    address = QuillField(default='')
     copyright = models.CharField(max_length=255, default="© BNC, 2022")
 
 
@@ -39,7 +40,7 @@ class Homepage(SingletonModel):
     splash_title = models.CharField(max_length=255, default='Title')
     splash_text = models.TextField(default='Lorem ipsum...')
     splash_image = ProcessedImageField(
-        format='JPEG', options={'quality': 90}, processors=[SmartResize(500, 350)])
+        format='JPEG', options={'quality': 90}, processors=[ResizeToFit(width=1280)])
 
     # --- Splash END
 
@@ -86,7 +87,7 @@ class PageSection(FieldValidationMixin, models.Model):
 
 
 class TextItem(models.Model):
-    text = QuillField()
+    text = QuillField(default='')
     section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
 
 
@@ -98,15 +99,15 @@ class Partner(models.Model):
 
 class Question(models.Model):
     question = models.CharField(max_length=255)
-    answer = models.TextField()
+    answer = QuillField(default='')
     section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
 
 
 class IconTextItem(models.Model):
     icon = models.FileField(validators=[is_svg])
     title = models.CharField(max_length=255)
-    summary = models.TextField()
-    details = models.TextField(null=True, blank=True)
+    summary = QuillField(default='')
+    details = QuillField(null=True, blank=True)
     section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
 
 
@@ -118,12 +119,12 @@ class Post(models.Model):
     status = models.CharField(
         max_length=255, default='draft', choices=STATUSES)
     title = models.CharField(max_length=255)
-    text = QuillField()
+    text = QuillField(default='')
     created_at = models.DateField(auto_now_add=True)
     main_image = ProcessedImageField(format='JPEG', options={'quality': 80}, processors=[
-                                     ResizeToFit(width=720, upscale=True)])
+                                     ResizeToFit(width=1280)])
     main_image_thumb = ImageSpecField(
-        source='main_image', processors=[SmartResize(240, 135)])
+        source='main_image', processors=[SmartResize(360, 203)])
 
     def __str__(self):
         return 'Post: ' + self.title
@@ -135,8 +136,7 @@ class Post(models.Model):
 class Image(models.Model):
     src = ProcessedImageField(format='JPEG', options={'quality': 80}, processors=[
                               ResizeToFit(width=1400)])
-    thumb = ImageSpecField(source='src', processors=[SmartResize(240, 135)])
-    alt = models.CharField(max_length=255, null=True, blank=True)
+    thumb = ImageSpecField(source='src', processors=[SmartResize(360, 203)])
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
 
@@ -162,4 +162,4 @@ class CryptoPaymentDetail(models.Model):
 
 class PaymentDetail(models.Model):
     title = models.CharField(max_length=255)
-    text = QuillField()
+    text = QuillField(default='')

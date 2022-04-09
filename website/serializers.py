@@ -30,7 +30,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Image
-        fields = ['id', 'src', 'alt', 'thumb']
+        fields = ['id', 'src', 'thumb']
 
 
 class PostShortSerializer(serializers.ModelSerializer):
