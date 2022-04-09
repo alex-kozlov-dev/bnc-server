@@ -64,6 +64,7 @@ class SocialLinkSerializer(serializers.ModelSerializer):
 
 
 class WebsiteMetaSerializer(serializers.ModelSerializer):
+    address = QuillHtmlField()
     social_links = SocialLinkSerializer(
         source='sociallink_set',
         many=True,
@@ -78,12 +79,17 @@ class WebsiteMetaSerializer(serializers.ModelSerializer):
 
 
 class IconTextItemSerializer(serializers.ModelSerializer):
+    summary = QuillHtmlField()
+    details = QuillHtmlField()
+
     class Meta:
         model = models.IconTextItem
         fields = ['id', 'icon', 'title', 'summary', 'details']
 
 
 class QuestionSerializer(serializers.ModelSerializer):
+    answer = QuillHtmlField()
+
     class Meta:
         model = models.Question
         fields = ['id', 'question', 'answer']

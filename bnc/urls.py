@@ -22,6 +22,7 @@ from django.conf.urls.i18n import i18n_patterns
 from website import views
 
 urlpatterns = [
+    path('', views.index_redirect),
     path('admin/', admin.site.urls),
     path('_nested_admin/', include('nested_admin.urls')),
 ]

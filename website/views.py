@@ -1,9 +1,14 @@
+from django.shortcuts import redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Q
 
 from . import models, serializers
+
+
+def index_redirect(request):
+    return redirect('/admin/')
 
 
 @api_view(['GET'])
