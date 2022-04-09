@@ -13,9 +13,11 @@ class WebsiteMeta(SingletonModel):
     title = models.CharField(max_length=255, default='Title')
     description = models.TextField(default='')
     logo = models.FileField(validators=[is_svg])
+    logo_inverted = models.FileField(validators=[is_svg])
     email = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
     address = models.TextField()
+    copyright = models.CharField(max_length=255, default="© BNC, 2022")
 
 
 class SocialLink(models.Model):

@@ -73,7 +73,8 @@ class WebsiteMetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.WebsiteMeta
         fields = ['id', 'title', 'description',
-                  'social_links', 'email', 'phone_number', 'address']
+                  'social_links', 'email', 'phone_number',
+                  'address', 'logo', 'logo_inverted', 'copyright']
 
 
 class IconTextItemSerializer(serializers.ModelSerializer):
