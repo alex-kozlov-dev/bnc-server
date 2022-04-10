@@ -34,12 +34,11 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class PostShortSerializer(serializers.ModelSerializer):
-    text = QuillHtmlField()
     main_image_thumb = serializers.ImageField(read_only=True)
 
     class Meta:
         model = models.Post
-        fields = ['id', 'title', 'text', 'main_image_thumb']
+        fields = ['id', 'title', 'slug', 'main_image_thumb']
 
 
 class PostSerializer(serializers.ModelSerializer):

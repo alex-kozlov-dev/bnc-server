@@ -20,7 +20,8 @@ class ImageInline(NestedStackedInline):
 
 @admin.register(models.Post)
 class PostAdmin(TranslationAdmin, NestedModelAdmin):
-    fields = ('status', 'title', 'text', 'main_image', 'image_preview')
+    fields = ('status', 'title', 'slug', 'text', 'main_image', 'image_preview')
+    prepopulated_fields = {"slug": ("title_uk",)}
     inlines = [ImageInline]
     readonly_fields = ('image_preview', 'main_image_thumb')
     image_preview = AdminThumbnail(image_field='main_image_thumb')

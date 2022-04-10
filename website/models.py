@@ -116,6 +116,7 @@ class Post(models.Model):
         ('draft', 'Draft'),
         ('published', 'Published')
     )
+    slug = models.SlugField(max_length=100, unique=True)
     status = models.CharField(
         max_length=255, default='draft', choices=STATUSES)
     title = models.CharField(max_length=255)

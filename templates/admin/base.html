@@ -1,4 +1,5 @@
 {% extends 'admin/base.html' %}
+{% load static %}
 
 {% block extrahead %}
 <script>
@@ -12,6 +13,7 @@
 </script>
 {% endblock %}
 {% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/quill.css' %}">
 <style>
   .custom-btn-link,
   .custom-btn-link:hover {

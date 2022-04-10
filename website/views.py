@@ -13,7 +13,6 @@ def index_redirect(request):
 
 @api_view(['GET'])
 def homepage_view(request):
-
     homepage = models.Homepage.get_solo()
     serializer = serializers.HomepageSerializer(homepage)
     return Response(serializer.data)
@@ -21,31 +20,49 @@ def homepage_view(request):
 
 @api_view(['GET'])
 def meta_view(request):
-
     meta = models.WebsiteMeta.get_solo()
     serializer = serializers.WebsiteMetaSerializer(meta)
-    return Response(serializer.data)
+
+    posts = models.Post.objects.all()
+    files = models.File.objects.all()
+
+    if not request.GET.get('preview'):
+        posts = posts.filter(status='published')
+
+    data = serializer.data
+    data['posts_exists'] = posts.exists()
+    data['files_exists'] = files.exists()
+
+    return Response(data)
 
 
 @api_view(['GET'])
 def posts_view(request):
-    posts = models.Post.objects.filter(status='published')
+    posts = models.Post.objects.all()
+
+    if not request.GET.get('preview'):
+        posts = posts.filter(status='published')
+
     serializer = serializers.PostShortSerializer(posts, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def post_detail_view(request, pk):
+def post_detail_view(request, slug):
     try:
-        post = models.Post.objects.get(pk=pk)
+        post = models.Post.objects.get(slug=slug)
     except models.Post.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     post_serializer = serializers.PostSerializer(post)
-    other_posts = models.Post.objects.filter(
-        status='published').filter(~Q(pk=pk))[:2]
+
+    other_posts = models.Post.objects.filter(~Q(slug=slug))
+
+    if not request.GET.get('preview'):
+        other_posts = other_posts.filter(status='published')
+
     other_posts_serializer = serializers.PostShortSerializer(
-        other_posts, many=True)
+        other_posts[:2], many=True)
 
     return Response({'post': post_serializer.data, 'other_posts': other_posts_serializer.data})
 

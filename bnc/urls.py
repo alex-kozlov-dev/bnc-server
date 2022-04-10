@@ -33,7 +33,7 @@ urlpatterns += i18n_patterns(
     path('homepage/', views.homepage_view),
     path('meta/', views.meta_view),
     path('posts/', views.posts_view),
-    path('posts/<int:pk>/', views.post_detail_view),
+    path('posts/<str:slug>/', views.post_detail_view),
     path('payment_details/', views.payment_details_view),
     path('files/', views.files_view),
 )
