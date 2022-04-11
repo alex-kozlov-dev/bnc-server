@@ -69,18 +69,10 @@ def post_detail_view(request, slug):
 
 @api_view(['GET'])
 def payment_details_view(request):
-    payment_details = models.PaymentDetail.objects.all()
-    crypto_payment_details = models.CryptoPaymentDetail.objects.all()
+    payment = models.Payment.get_solo()
+    serializer = serializers.PaymentSerializer(payment)
 
-    payment_details_serializer = serializers.PaymentDetailSerializer(
-        payment_details, many=True)
-    crypto_payment_details_serializer = serializers.CryptoPaymentDetailSerializer(
-        crypto_payment_details, many=True)
-
-    return Response({
-        'payment_details': payment_details_serializer.data,
-        'crypto_payment_details': crypto_payment_details_serializer.data,
-    })
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

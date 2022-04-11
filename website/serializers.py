@@ -19,6 +19,24 @@ class PaymentDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'text']
 
 
+class PaymentSerializer(serializers.ModelSerializer):
+    payment_details = PaymentDetailSerializer(
+        source='paymentdetail_set',
+        many=True,
+        read_only=True
+    )
+    crypto_payment_details = CryptoPaymentDetailSerializer(
+        source='cryptopaymentdetail_set',
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = models.Payment
+        fields = ['id', 'liqpay_link',
+                  'payment_details', 'crypto_payment_details']
+
+
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.File

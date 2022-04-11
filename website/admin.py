@@ -96,11 +96,16 @@ class FileAdmin(TranslationAdmin):
     pass
 
 
-@admin.register(models.PaymentDetail)
-class PaymentDetailAdmin(TranslationAdmin):
-    pass
+class PaymentDetailInline(TranslationStackedInline):
+    model = models.PaymentDetail
+    extra = 1
 
 
-@admin.register(models.CryptoPaymentDetail)
-class CryptoPaymentDetailAdmin(admin.ModelAdmin):
-    pass
+class CryptoPaymentDetailInline(admin.StackedInline):
+    model = models.CryptoPaymentDetail
+    extra = 1
+
+
+@admin.register(models.Payment)
+class PaymentAdmin(SingletonModelAdmin):
+    inlines = [PaymentDetailInline, CryptoPaymentDetailInline]

@@ -1,5 +1,6 @@
 from email.policy import default
 from django.db import models
+from django.forms import modelformset_factory
 from solo.models import SingletonModel
 from extra_validator import FieldValidationMixin
 from django_quill.fields import QuillField
@@ -146,6 +147,10 @@ class File(models.Model):
     title = models.CharField(max_length=255)
 
 
+class Payment(SingletonModel):
+    liqpay_link: models.CharField(max_length=255, null=True, blank=True)
+
+
 class CryptoPaymentDetail(models.Model):
     CRYPTO_TYPES = (
         ('btc', 'Bitcoin'),
@@ -156,6 +161,7 @@ class CryptoPaymentDetail(models.Model):
     )
     crypto_type = models.CharField(max_length=255, choices=CRYPTO_TYPES)
     wallet = models.CharField(max_length=255)
+    payment = models.ForeignKey(Payment, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.crypto_type.capitalize() + ' ' + self.wallet
@@ -164,3 +170,4 @@ class CryptoPaymentDetail(models.Model):
 class PaymentDetail(models.Model):
     title = models.CharField(max_length=255)
     text = QuillField(default='')
+    payment = models.ForeignKey(Payment, on_delete=models.CASCADE)
