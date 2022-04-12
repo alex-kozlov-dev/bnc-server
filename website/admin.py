@@ -109,3 +109,12 @@ class CryptoPaymentDetailInline(admin.StackedInline):
 @admin.register(models.Payment)
 class PaymentAdmin(SingletonModelAdmin):
     inlines = [PaymentDetailInline, CryptoPaymentDetailInline]
+
+
+@admin.register(models.Legal)
+class LegalAdmin(SingletonModelAdmin, TranslationAdmin):
+    fieldsets = [
+        ('Terms of use', {'fields': ['terms_of_use_enabled', 'terms_of_use']}),
+        ('Privacy policy', {'fields': [
+         'privacy_policy_enabled', 'privacy_policy']}),
+    ]

@@ -39,6 +39,10 @@ class PaymentDetailTranslationOptions(TranslationOptions):
     fields = ('title', 'text')
 
 
+class LegalTranslationOptions(TranslationOptions):
+    fields = ('terms_of_use', 'privacy_policy')
+
+
 translator.register(models.WebsiteMeta, WebsiteMetaTranslationOptions)
 translator.register(models.Homepage, HomepageTranslationOptions)
 translator.register(models.PageSection, PageSectionTranslationOptions)
@@ -48,3 +52,4 @@ translator.register(models.Question, QuestionTranslationOptions)
 translator.register(models.Post, PostTranslationOptions)
 translator.register(models.File, FileTranslationOptions)
 translator.register(models.PaymentDetail, PaymentDetailTranslationOptions)
+translator.register(models.Legal, LegalTranslationOptions)

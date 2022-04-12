@@ -36,4 +36,5 @@ urlpatterns += i18n_patterns(
     path('posts/<str:slug>/', views.post_detail_view),
     path('payment_details/', views.payment_details_view),
     path('files/', views.files_view),
+    path('legal/', views.legal_view),
 )

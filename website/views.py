@@ -33,6 +33,10 @@ def meta_view(request):
     data['posts_exists'] = posts.exists()
     data['files_exists'] = files.exists()
 
+    legal = models.Legal.get_solo()
+    data['terms_of_use_enabled'] = legal.terms_of_use_enabled
+    data['privacy_policy_enabled'] = legal.privacy_policy_enabled
+
     return Response(data)
 
 
@@ -81,3 +85,11 @@ def files_view(request):
     files_serializer = serializers.FileSerializer(files, many=True)
 
     return Response(files_serializer.data)
+
+
+@api_view(['GET'])
+def legal_view(request):
+    legal = models.Legal.get_solo()
+    serializer = serializers.LegalSerializer(legal)
+
+    return Response(serializer.data)

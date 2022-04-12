@@ -170,3 +170,13 @@ class HomepageSerializer(serializers.ModelSerializer):
         model = models.Homepage
         fields = ['id', 'splash_title', 'splash_text',
                   'splash_image', 'page_sections']
+
+
+class LegalSerializer(serializers.ModelSerializer):
+    terms_of_use = QuillHtmlField()
+    privacy_policy = QuillHtmlField()
+
+    class Meta:
+        model = models.Legal
+        fields = ['terms_of_use_enabled', 'terms_of_use',
+                  'privacy_policy_enabled', 'privacy_policy']
