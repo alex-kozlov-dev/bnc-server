@@ -31,6 +31,7 @@
         } else if (value === 'text_image') {
           show('title');
           show('text');
+          show('image_on_the_left');
           show('image');
         } else if (value === 'donate_cta') {
           show('cta');

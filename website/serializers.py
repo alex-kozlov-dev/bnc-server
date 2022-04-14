@@ -155,8 +155,9 @@ class PageSectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PageSection
-        fields = ['id', 'section_type', 'title',
-                  'text', 'cta', 'image', 'text_items', 'partners', 'questions', 'icon_text_items']
+        fields = ['id', 'section_type', 'title', 'image_on_the_left',
+                  'text', 'cta', 'image', 'text_items', 'partners',
+                  'questions', 'icon_text_items']
 
 
 class HomepageSerializer(serializers.ModelSerializer):

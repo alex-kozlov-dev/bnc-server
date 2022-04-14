@@ -80,6 +80,7 @@ class PageSection(FieldValidationMixin, models.Model):
     title = models.CharField(max_length=255, null=True, blank=True)
     cta = models.CharField(max_length=255, null=True, blank=True)
     text = QuillField(null=True, blank=True)
+    image_on_the_left = models.BooleanField(default=False)
     image = ProcessedImageField(null=True, blank=True, format='JPEG', options={
         'quality': 80}, processors=[ResizeToFit(width=500, upscale=True)])
 
