@@ -1,11 +1,8 @@
 from django.contrib import admin
 from solo.admin import SingletonModelAdmin
-from modeltranslation.admin import TranslationAdmin, TranslationStackedInline, TranslationTabularInline
+from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
-from django.utils.html import mark_safe
 from imagekit.admin import AdminThumbnail
-
-from bnc.settings import MEDIA_URL
 
 from . import models
 
@@ -15,7 +12,8 @@ class ImageInline(NestedStackedInline):
     readonly_fields = ('preview', 'thumb')
     preview = AdminThumbnail(image_field='thumb')
     model = models.Image
-    extra = 1
+    sortable_field_name = "position"
+    extra = 0
 
 
 @admin.register(models.Post)
@@ -25,6 +23,7 @@ class PostAdmin(TranslationAdmin, NestedModelAdmin):
     inlines = [ImageInline]
     readonly_fields = ('image_preview', 'main_image_thumb')
     image_preview = AdminThumbnail(image_field='main_image_thumb')
+    sortable_field_name = "position"
 
     class Media:
         css = {
@@ -34,7 +33,8 @@ class PostAdmin(TranslationAdmin, NestedModelAdmin):
 
 class SocialLinkInline(NestedTabularInline):
     model = models.SocialLink
-    extra = 1
+    sortable_field_name = "position"
+    extra = 0
 
 
 @admin.register(models.WebsiteMeta)
@@ -44,22 +44,26 @@ class WebsiteMetaAdmin(SingletonModelAdmin, TranslationAdmin, NestedModelAdmin):
 
 class IconTextItemInline(NestedStackedInline, TranslationStackedInline):
     model = models.IconTextItem
-    extra = 1
+    sortable_field_name = "position"
+    extra = 0
 
 
 class QuestionInline(NestedStackedInline, TranslationStackedInline):
     model = models.Question
-    extra = 1
+    sortable_field_name = "position"
+    extra = 0
 
 
 class PartnerInline(NestedStackedInline):
     model = models.Partner
-    extra = 1
+    sortable_field_name = "position"
+    extra = 0
 
 
 class TextItemInline(NestedStackedInline, TranslationStackedInline):
     model = models.TextItem
-    extra = 1
+    sortable_field_name = "position"
+    extra = 0
 
 
 class PageSectionInline(NestedStackedInline, TranslationStackedInline):
@@ -71,7 +75,9 @@ class PageSectionInline(NestedStackedInline, TranslationStackedInline):
 
     image_preview = AdminThumbnail(image_field='image')
 
-    extra = 1
+    sortable_field_name = "position"
+
+    extra = 0
 
 
 @admin.register(models.Homepage)
@@ -92,22 +98,24 @@ class HomepageAdmin(SingletonModelAdmin, TranslationAdmin, NestedModelAdmin):
 
 
 @admin.register(models.File)
-class FileAdmin(TranslationAdmin):
-    pass
+class FileAdmin(TranslationAdmin, NestedModelAdmin):
+    sortable_field_name = "position"
 
 
-class PaymentDetailInline(TranslationStackedInline):
+class PaymentDetailInline(NestedStackedInline, TranslationStackedInline):
     model = models.PaymentDetail
-    extra = 1
+    sortable_field_name = "position"
+    extra = 0
 
 
-class CryptoPaymentDetailInline(admin.StackedInline):
+class CryptoPaymentDetailInline(NestedStackedInline):
     model = models.CryptoPaymentDetail
-    extra = 1
+    sortable_field_name = "position"
+    extra = 0
 
 
 @admin.register(models.Payment)
-class PaymentAdmin(SingletonModelAdmin):
+class PaymentAdmin(SingletonModelAdmin, NestedModelAdmin):
     inlines = [PaymentDetailInline, CryptoPaymentDetailInline]
 
 

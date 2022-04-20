@@ -1,6 +1,4 @@
-from email.policy import default
 from django.db import models
-from django.forms import modelformset_factory
 from solo.models import SingletonModel
 from extra_validator import FieldValidationMixin
 from django_quill.fields import QuillField
@@ -9,6 +7,14 @@ from imagekit.processors import SmartResize, ResizeToFit
 
 from website.utils import i18nfields
 from website.validators import is_svg
+
+
+class SortableModel(models.Model):
+    position = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['position']
+        abstract = True
 
 
 class Legal(SingletonModel):
@@ -29,7 +35,7 @@ class WebsiteMeta(SingletonModel):
     copyright = models.CharField(max_length=255, default="© BNC, 2022")
 
 
-class SocialLink(models.Model):
+class SocialLink(SortableModel):
     SOCIAL_TYPES = (
         ('facebook', 'Facebook'),
         ('instagram', 'Instagram'),
@@ -63,7 +69,7 @@ def is_type(type):
     return lambda s: s.section_type == type
 
 
-class PageSection(FieldValidationMixin, models.Model):
+class PageSection(FieldValidationMixin, SortableModel):
     SECTION_TYPES = (
         ('text', 'Text'),
         ('text_image', 'Text + Image'),
@@ -95,24 +101,24 @@ class PageSection(FieldValidationMixin, models.Model):
         return self.section_type
 
 
-class TextItem(models.Model):
+class TextItem(SortableModel):
     text = QuillField(default='')
     section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
 
 
-class Partner(models.Model):
+class Partner(SortableModel):
     image = models.ImageField()
     title = models.CharField(max_length=255)
     section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
 
 
-class Question(models.Model):
+class Question(SortableModel):
     question = models.CharField(max_length=255)
     answer = QuillField(default='')
     section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
 
 
-class IconTextItem(models.Model):
+class IconTextItem(SortableModel):
     icon = models.FileField(validators=[is_svg])
     title = models.CharField(max_length=255)
     summary = QuillField(default='')
@@ -120,7 +126,7 @@ class IconTextItem(models.Model):
     section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
 
 
-class Post(models.Model):
+class Post(SortableModel):
     STATUSES = (
         ('draft', 'Draft'),
         ('published', 'Published')
@@ -143,14 +149,14 @@ class Post(models.Model):
         verbose_name_plural = 'Posts'
 
 
-class Image(models.Model):
+class Image(SortableModel):
     src = ProcessedImageField(format='JPEG', options={'quality': 80}, processors=[
                               ResizeToFit(width=1400)])
     thumb = ImageSpecField(source='src', processors=[SmartResize(360, 203)])
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
 
-class File(models.Model):
+class File(SortableModel):
     src = models.FileField('File')
     title = models.CharField(max_length=255)
 
@@ -159,7 +165,7 @@ class Payment(SingletonModel):
     liqpay_link = models.CharField(max_length=255, null=True, blank=True)
 
 
-class CryptoPaymentDetail(models.Model):
+class CryptoPaymentDetail(SortableModel):
     CRYPTO_TYPES = (
         ('btc', 'Bitcoin'),
         ('eth', 'Etherium'),
@@ -175,7 +181,7 @@ class CryptoPaymentDetail(models.Model):
         return self.crypto_type.capitalize() + ' ' + self.wallet
 
 
-class PaymentDetail(models.Model):
+class PaymentDetail(SortableModel):
     title = models.CharField(max_length=255)
     text = QuillField(default='')
     payment = models.ForeignKey(Payment, on_delete=models.CASCADE)
