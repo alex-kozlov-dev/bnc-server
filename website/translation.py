@@ -12,11 +12,7 @@ class WebsiteMetaTranslationOptions(TranslationOptions):
 
 
 class IconTextItemTranslationOptions(TranslationOptions):
-    fields = ('title', 'summary', 'details')
-
-
-class QuestionTranslationOptions(TranslationOptions):
-    fields = ('question', 'answer')
+    fields = ('title', 'text')
 
 
 class TextItemTranslationOptions(TranslationOptions):
@@ -24,11 +20,8 @@ class TextItemTranslationOptions(TranslationOptions):
 
 
 class HomepageTranslationOptions(TranslationOptions):
-    fields = ('splash_title', 'splash_text')
-
-
-class PageSectionTranslationOptions(TranslationOptions):
-    fields = ('title', 'text', 'cta')
+    fields = ('splash_title', 'splash_text', 'intro_text',
+              'intro_text_2', 'cta', 'outro_text')
 
 
 class FileTranslationOptions(TranslationOptions):
@@ -45,10 +38,9 @@ class LegalTranslationOptions(TranslationOptions):
 
 translator.register(models.WebsiteMeta, WebsiteMetaTranslationOptions)
 translator.register(models.Homepage, HomepageTranslationOptions)
-translator.register(models.PageSection, PageSectionTranslationOptions)
 translator.register(models.TextItem, TextItemTranslationOptions)
-translator.register(models.IconTextItem, IconTextItemTranslationOptions)
-translator.register(models.Question, QuestionTranslationOptions)
+translator.register(models.WartimeItem, IconTextItemTranslationOptions)
+translator.register(models.PeacetimeItem, IconTextItemTranslationOptions)
 translator.register(models.Post, PostTranslationOptions)
 translator.register(models.File, FileTranslationOptions)
 translator.register(models.PaymentDetail, PaymentDetailTranslationOptions)

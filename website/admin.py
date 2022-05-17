@@ -12,7 +12,7 @@ class ImageInline(NestedStackedInline):
     readonly_fields = ('preview', 'thumb')
     preview = AdminThumbnail(image_field='thumb')
     model = models.Image
-    sortable_field_name = "position"
+    # sortable_field_name = "position"
     extra = 0
 
 
@@ -24,6 +24,7 @@ class PostAdmin(TranslationAdmin, NestedModelAdmin):
     readonly_fields = ('image_preview', 'main_image_thumb')
     image_preview = AdminThumbnail(image_field='main_image_thumb')
     sortable_field_name = "position"
+    fieldsets_and_inlines_order = ('f', 'i')
 
     class Media:
         css = {
@@ -42,14 +43,14 @@ class WebsiteMetaAdmin(SingletonModelAdmin, TranslationAdmin, NestedModelAdmin):
     inlines = [SocialLinkInline]
 
 
-class IconTextItemInline(NestedStackedInline, TranslationStackedInline):
-    model = models.IconTextItem
+class WartimeItemInline(NestedStackedInline, TranslationStackedInline):
+    model = models.WartimeItem
     sortable_field_name = "position"
     extra = 0
 
 
-class QuestionInline(NestedStackedInline, TranslationStackedInline):
-    model = models.Question
+class PeacetimeItemInline(NestedStackedInline, TranslationStackedInline):
+    model = models.PeacetimeItem
     sortable_field_name = "position"
     extra = 0
 
@@ -63,42 +64,65 @@ class PartnerInline(NestedStackedInline):
 class TextItemInline(NestedStackedInline, TranslationStackedInline):
     model = models.TextItem
     sortable_field_name = "position"
-    extra = 0
-
-
-class PageSectionInline(NestedStackedInline, TranslationStackedInline):
-    model = models.PageSection
-    inlines = [TextItemInline, PartnerInline,
-               QuestionInline, IconTextItemInline]
-
-    readonly_fields = ('image_preview',)
-
-    image_preview = AdminThumbnail(image_field='image')
-
-    sortable_field_name = "position"
-
+    verbose_name = 'Item'
+    verbose_name_plural = 'Who are we helping?'
     extra = 0
 
 
 @admin.register(models.Homepage)
 class HomepageAdmin(SingletonModelAdmin, TranslationAdmin, NestedModelAdmin):
     fieldsets = [
-        ('Splash screen', {'fields': [
-         'splash_title', 'splash_text', 'splash_image', 'image_preview']})
+        ('Splash screen', {
+            'fields': [
+                'splash_title',
+                'splash_text',
+                'splash_image',
+                'splash_image_preview'
+            ]
+        }),
+        ('Intro', {
+            'fields': [
+                'intro_text',
+                'intro_image',
+                'intro_text_2',
+            ]
+        }),
+        ('Wartime', {
+            'fields': [
+                'wartime_image',
+                # 'wartime_items'
+            ]
+        }),
+        ('Peacetime', {
+            'fields': [
+                'peacetime_image',
+                # 'peacetime_items'
+            ]
+        }),
+        ('CTA', {
+            'fields': ['cta']
+        }),
+        # ('Partners', {
+        #     'fields': ['partners']
+        # }),
+        # ('Who are we helping?', {
+        #     'fields': ['who_we_help']
+        # }),
+        ('Outro', {
+            'fields': ['outro_text']
+        })
     ]
-    inlines = [PageSectionInline]
-    readonly_fields = ('image_preview',)
-    image_preview = AdminThumbnail(image_field='splash_image')
-
-    class Media:
-        js = (
-            'https://code.jquery.com/jquery-3.6.0.min.js',
-            'admin/js/homepage_sections_admin.js',
-        )
+    inlines = [WartimeItemInline, PeacetimeItemInline,
+               PartnerInline, TextItemInline]
+    readonly_fields = ('splash_image_preview',)
+    splash_image_preview = AdminThumbnail(image_field='splash_image')
+    fieldsets_and_inlines_order = (
+        'f', 'f', 'f', 'i', 'f', 'i', 'f', 'i', 'i', 'f')
 
 
 @admin.register(models.File)
 class FileAdmin(TranslationAdmin, NestedModelAdmin):
+    fieldsets_and_inlines_order = ('f',)
     sortable_field_name = "position"
 
 
@@ -117,6 +141,7 @@ class CryptoPaymentDetailInline(NestedStackedInline):
 @admin.register(models.Payment)
 class PaymentAdmin(SingletonModelAdmin, NestedModelAdmin):
     inlines = [PaymentDetailInline, CryptoPaymentDetailInline]
+    fieldsets_and_inlines_order = ('f', 'i', 'i')
 
 
 @admin.register(models.Legal)
@@ -126,3 +151,4 @@ class LegalAdmin(SingletonModelAdmin, TranslationAdmin):
         ('Privacy policy', {'fields': [
          'privacy_policy_enabled', 'privacy_policy']}),
     ]
+    fieldsets_and_inlines_order = ('f', 'f')

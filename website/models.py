@@ -17,6 +17,15 @@ class SortableModel(models.Model):
         abstract = True
 
 
+class IconTextItemModel(SortableModel):
+    icon = models.FileField(validators=[is_svg])
+    title = models.CharField(max_length=255)
+    text = QuillField(default='')
+
+    class Meta:
+        abstract = True
+
+
 class Legal(SingletonModel):
     terms_of_use_enabled = models.BooleanField(default=False)
     terms_of_use = QuillField(null=True, blank=True)
@@ -54,9 +63,33 @@ class Homepage(SingletonModel):
     splash_title = models.CharField(max_length=255, default='Title')
     splash_text = models.TextField(default='Lorem ipsum...')
     splash_image = ProcessedImageField(
-        format='JPEG', options={'quality': 90}, processors=[ResizeToFit(width=1280)])
-
+        format='PNG', options={'quality': 90}, processors=[ResizeToFit(width=1280)])
     # --- Splash END
+
+    # --- Intro
+    intro_text = QuillField(null=True, blank=True)
+    intro_image = ProcessedImageField(
+        format='JPEG', options={'quality': 90}, processors=[ResizeToFit(width=1280)])
+    intro_text_2 = QuillField(null=True, blank=True)
+    # --- Intro END
+
+    # --- Wartime
+    wartime_image = ProcessedImageField(
+        format='JPEG', options={'quality': 90}, processors=[ResizeToFit(width=1280)])
+    # --- Wartime END
+
+    # --- Peacetime
+    peacetime_image = ProcessedImageField(
+        format='JPEG', options={'quality': 90}, processors=[ResizeToFit(width=1280)])
+    # --- Wartime END
+
+    # --- CTA
+    cta = models.CharField(max_length=255, null=True, blank=True)
+    # --- CTA END
+
+    # --- Outro
+    outro_text = QuillField(null=True, blank=True)
+    # --- Outro END
 
     def __str__(self) -> str:
         return 'Homepage'
@@ -65,65 +98,39 @@ class Homepage(SingletonModel):
         verbose_name = 'Homepage'
 
 
-def is_type(type):
-    return lambda s: s.section_type == type
-
-
-class PageSection(FieldValidationMixin, SortableModel):
-    SECTION_TYPES = (
-        ('text', 'Text'),
-        ('text_image', 'Text + Image'),
-        ('donate_cta', 'CTA + Donate button'),
-        ('text_list', 'Numbered text list'),
-        ('partners', 'Partners list'),
-        ('qa', 'Questions & Answers'),
-        ('icon_text_list', 'Icon+Text list'),
+class WartimeItem(IconTextItemModel):
+    homepage = models.ForeignKey(
+        Homepage,
+        on_delete=models.CASCADE,
+        related_name='wartime_items'
     )
-    section_type = models.CharField(max_length=255, choices=SECTION_TYPES)
-    page = models.ForeignKey(
-        Homepage, on_delete=models.CASCADE, null=True, blank=True)
-
-    title = models.CharField(max_length=255, null=True, blank=True)
-    cta = models.CharField(max_length=255, null=True, blank=True)
-    text = QuillField(null=True, blank=True)
-    image_on_the_left = models.BooleanField(default=False)
-    image = ProcessedImageField(null=True, blank=True, format='JPEG', options={
-        'quality': 80}, processors=[ResizeToFit(width=500, upscale=True)])
-
-    REQUIRED_FIELDS = ['section_type']
-    CONDITIONAL_REQUIRED_FIELDS = [
-        (is_type('text'), i18nfields(['title', 'text'])),
-        (is_type('text_image'), i18nfields(['title', 'text']) + ['image']),
-        (is_type('donate_cta'), i18nfields(['cta'])),
-    ]
-
-    def __str__(self) -> str:
-        return self.section_type
 
 
-class TextItem(SortableModel):
-    text = QuillField(default='')
-    section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
+class PeacetimeItem(IconTextItemModel):
+    homepage = models.ForeignKey(
+        Homepage,
+        on_delete=models.CASCADE,
+        related_name='peacetime_items'
+    )
 
 
 class Partner(SortableModel):
     image = models.ImageField()
     title = models.CharField(max_length=255)
-    section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
+    homepage = models.ForeignKey(
+        Homepage,
+        on_delete=models.CASCADE,
+        related_name='partners'
+    )
 
 
-class Question(SortableModel):
-    question = models.CharField(max_length=255)
-    answer = QuillField(default='')
-    section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
-
-
-class IconTextItem(SortableModel):
-    icon = models.FileField(validators=[is_svg])
-    title = models.CharField(max_length=255)
-    summary = QuillField(default='')
-    details = QuillField(null=True, blank=True)
-    section = models.ForeignKey(PageSection, on_delete=models.CASCADE)
+class TextItem(SortableModel):
+    text = models.CharField(max_length=255)
+    homepage = models.ForeignKey(
+        Homepage,
+        on_delete=models.CASCADE,
+        related_name='who_we_help'
+    )
 
 
 class Post(SortableModel):
@@ -153,7 +160,8 @@ class Image(SortableModel):
     src = ProcessedImageField(format='JPEG', options={'quality': 80}, processors=[
                               ResizeToFit(width=1400)])
     thumb = ImageSpecField(source='src', processors=[SmartResize(360, 203)])
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, null=True, blank=True)
 
 
 class File(SortableModel):

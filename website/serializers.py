@@ -95,82 +95,74 @@ class WebsiteMetaSerializer(serializers.ModelSerializer):
                   'address', 'logo', 'logo_inverted', 'copyright']
 
 
-class IconTextItemSerializer(serializers.ModelSerializer):
-    summary = QuillHtmlField()
-    details = QuillHtmlField()
-
-    class Meta:
-        model = models.IconTextItem
-        fields = ['id', 'icon', 'title', 'summary', 'details']
-
-
-class QuestionSerializer(serializers.ModelSerializer):
-    answer = QuillHtmlField()
-
-    class Meta:
-        model = models.Question
-        fields = ['id', 'question', 'answer']
-
-
 class PartnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Partner
         fields = ['id', 'title', 'image']
 
 
-class TextItemSerializer(serializers.ModelSerializer):
+class WartimeItemSerializer(serializers.ModelSerializer):
     text = QuillHtmlField()
 
+    class Meta:
+        model = models.WartimeItem
+        fields = ['id', 'icon', 'title', 'text']
+
+
+class PeacetimeItemSerializer(serializers.ModelSerializer):
+    text = QuillHtmlField()
+
+    class Meta:
+        model = models.PeacetimeItem
+        fields = ['id', 'icon', 'title', 'text']
+
+
+class TextItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TextItem
         fields = ['id', 'text']
 
 
-class PageSectionSerializer(serializers.ModelSerializer):
-    icon_text_items = IconTextItemSerializer(
-        source='icontextitem_set',
-        many=True,
-        read_only=True,
-    )
-
-    text_items = TextItemSerializer(
-        source='textitem_set',
-        many=True,
-        read_only=True
-    )
-
-    partners = PartnerSerializer(
-        source='partner_set',
-        many=True,
-        read_only=True,
-    )
-
-    questions = QuestionSerializer(
-        source='question_set',
-        many=True,
-        read_only=True,
-    )
-
-    text = QuillHtmlField()
-
-    class Meta:
-        model = models.PageSection
-        fields = ['id', 'section_type', 'title', 'image_on_the_left',
-                  'text', 'cta', 'image', 'text_items', 'partners',
-                  'questions', 'icon_text_items']
-
-
 class HomepageSerializer(serializers.ModelSerializer):
-    page_sections = PageSectionSerializer(
-        source='pagesection_set',
+    wartime_items = WartimeItemSerializer(
         many=True,
         read_only=True
     )
+    peacetime_items = PeacetimeItemSerializer(
+        many=True,
+        read_only=True
+    )
+    intro_text = QuillHtmlField()
+    intro_text_2 = QuillHtmlField()
+    partners = PartnerSerializer(
+        many=True,
+        read_only=True
+    )
+    who_we_help = TextItemSerializer(
+        many=True,
+        read_only=True
+    )
+    outro_text = QuillHtmlField()
 
     class Meta:
         model = models.Homepage
-        fields = ['id', 'splash_title', 'splash_text',
-                  'splash_image', 'page_sections']
+        fields = [
+            'id',
+            'splash_title',
+            'splash_text',
+            'splash_image',
+            'intro_text',
+            'intro_image',
+            'intro_text_2',
+            'wartime_image',
+            'wartime_items',
+            'peacetime_image',
+            'peacetime_items',
+            'cta',
+            'partners',
+            'who_we_help',
+            'outro_text',
+        ]
 
 
 class LegalSerializer(serializers.ModelSerializer):
