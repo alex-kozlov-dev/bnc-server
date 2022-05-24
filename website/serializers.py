@@ -101,7 +101,7 @@ class WebsiteMetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.WebsiteMeta
         fields = ['id', 'title', 'description',
-                  'social_links', 'email', 'phone_number',
+                  'social_links', 'email',
                   'address', 'logo', 'logo_inverted', 'copyright', 'phone_numbers']
 
 
