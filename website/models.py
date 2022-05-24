@@ -39,9 +39,17 @@ class WebsiteMeta(SingletonModel):
     logo = models.FileField(validators=[is_svg])
     logo_inverted = models.FileField(validators=[is_svg])
     email = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=255)
     address = QuillField(default='')
     copyright = models.CharField(max_length=255, default="")
+
+
+class PhoneNumber(SortableModel):
+    phone_number = models.CharField(max_length=255)
+    meta = models.ForeignKey(
+        WebsiteMeta,
+        on_delete=models.CASCADE,
+        related_name='phone_numbers'
+    )
 
 
 class SocialLink(SortableModel):

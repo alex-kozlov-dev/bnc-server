@@ -80,10 +80,20 @@ class SocialLinkSerializer(serializers.ModelSerializer):
         fields = ['id', 'social_type', 'link']
 
 
+class PhoneNumberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PhoneNumber
+        fields = ['id', 'phone_number']
+
+
 class WebsiteMetaSerializer(serializers.ModelSerializer):
     address = QuillHtmlField()
     social_links = SocialLinkSerializer(
         source='sociallink_set',
+        many=True,
+        read_only=True
+    )
+    phone_numbers = PhoneNumberSerializer(
         many=True,
         read_only=True
     )
@@ -92,7 +102,7 @@ class WebsiteMetaSerializer(serializers.ModelSerializer):
         model = models.WebsiteMeta
         fields = ['id', 'title', 'description',
                   'social_links', 'email', 'phone_number',
-                  'address', 'logo', 'logo_inverted', 'copyright']
+                  'address', 'logo', 'logo_inverted', 'copyright', 'phone_numbers']
 
 
 class PartnerSerializer(serializers.ModelSerializer):

@@ -38,9 +38,15 @@ class SocialLinkInline(NestedTabularInline):
     extra = 0
 
 
+class PhoneNumberInline(NestedTabularInline):
+    model = models.PhoneNumber
+    sortable_field_name = "position"
+    extra = 0
+
+
 @admin.register(models.WebsiteMeta)
 class WebsiteMetaAdmin(SingletonModelAdmin, TranslationAdmin, NestedModelAdmin):
-    inlines = [SocialLinkInline]
+    inlines = [SocialLinkInline, PhoneNumberInline]
 
 
 class WartimeItemInline(NestedStackedInline, TranslationStackedInline):
