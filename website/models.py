@@ -34,14 +34,14 @@ class Legal(SingletonModel):
 
 
 class WebsiteMeta(SingletonModel):
-    title = models.CharField(max_length=255, default='Title')
+    title = models.CharField(max_length=255, default='')
     description = models.TextField(default='')
     logo = models.FileField(validators=[is_svg])
     logo_inverted = models.FileField(validators=[is_svg])
     email = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
     address = QuillField(default='')
-    copyright = models.CharField(max_length=255, default="© BNC, 2022")
+    copyright = models.CharField(max_length=255, default="")
 
 
 class SocialLink(SortableModel):
@@ -60,8 +60,8 @@ class SocialLink(SortableModel):
 class Homepage(SingletonModel):
 
     # --- Splash
-    splash_title = models.CharField(max_length=255, default='Title')
-    splash_text = models.TextField(default='Lorem ipsum...')
+    splash_title = models.CharField(max_length=255, default='')
+    splash_text = models.TextField(default='')
     splash_image = ProcessedImageField(
         format='PNG', options={'quality': 90}, processors=[ResizeToFit(width=1280)])
     # --- Splash END
