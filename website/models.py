@@ -178,7 +178,7 @@ class File(SortableModel):
 
 
 class Payment(SingletonModel):
-    liqpay_enabled = models.BooleanField(default=False)
+    pass
 
 
 class CryptoPaymentDetail(SortableModel):
