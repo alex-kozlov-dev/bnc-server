@@ -28,9 +28,9 @@ class IconTextItemModel(SortableModel):
 
 class Legal(SingletonModel):
     terms_of_use_enabled = models.BooleanField(default=False)
-    terms_of_use = QuillField(null=True, blank=True)
+    terms_of_use = QuillField(null=True, blank=True, default='')
     privacy_policy_enabled = models.BooleanField(default=False)
-    privacy_policy = QuillField(null=True, blank=True)
+    privacy_policy = QuillField(null=True, blank=True, default='')
 
 
 class WebsiteMeta(SingletonModel):
@@ -178,7 +178,7 @@ class File(SortableModel):
 
 
 class Payment(SingletonModel):
-    liqpay_link = models.CharField(max_length=255, null=True, blank=True)
+    liqpay_enabled = models.BooleanField(default=False)
 
 
 class CryptoPaymentDetail(SortableModel):
