@@ -33,8 +33,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Payment
-        fields = ['id', 'liqpay_link',
-                  'payment_details', 'crypto_payment_details']
+        fields = ['id', 'payment_details', 'crypto_payment_details']
 
 
 class FileSerializer(serializers.ModelSerializer):
